@@ -1,16 +1,21 @@
-# calculator
+Formatted my phone and found out i did not come preinstalled with a calculator.
 
-A new Flutter project.
+Online one had ads or needed some form of payment so i'm making mine.
+This application aims to provide a simple, ad-free alternative to online or paid calculator tools.
 
-## Getting Started
+# Project Structure
+All screen views are place in /lib/screen with the startup function in /lib/main.dart
 
-This project is a starting point for a Flutter application.
+# Prerequisites
+- Flutter sdk
+- Any IDE(Andriod Studio / visual studio)
+- Jdk
 
-A few resources to get you started if this is your first Flutter project:
+Run flutter doctor to find out other I may have left out🙏
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+# Run
+```
+flutter run
+```
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+choose a device and run it on
