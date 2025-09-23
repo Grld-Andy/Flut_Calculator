@@ -1,4 +1,4 @@
-import 'package:calculator/screens/home.dart';
+import 'package:calculator/screens/main_view.dart';
 import 'package:flutter/material.dart';
 
 void main(){
@@ -11,8 +11,10 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Calculator',
-      home: HomePage(),
+      title: 'Calculator v0.1',
+      home: Scaffold(
+        body: MainView(),
+      ),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)
