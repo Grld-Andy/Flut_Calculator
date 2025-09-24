@@ -20,12 +20,11 @@ class MainView extends StatelessWidget {
         child: Column(
           children: [
             // display screen
-              Column(
-                children: [
-                  Text("5 + 3"),
-                  Text("8")
-                ],
-              ),
+            Expanded(
+              child: Column(
+                children: [],
+              )
+            ),
         
             // buttons grid
             Expanded(
