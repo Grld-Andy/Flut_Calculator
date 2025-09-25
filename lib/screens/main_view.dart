@@ -6,7 +6,7 @@ class MainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final List<String> buttons = [
-      "%", "(", ")", "÷",
+      "<", "%", "()", "÷",
       "7", "8", "9", "*",
       "6", "5", "4", "-",
       "3", "2", "1", "+",
@@ -62,11 +62,12 @@ class MainView extends StatelessWidget {
                 itemCount: buttons.length,
                 itemBuilder: (context, index){
                   final buttonText = buttons[index];
-                  bool isOperator = ["+", "-", "*", "÷", "=", "(", ")", "%"].contains(buttonText);
+                  bool isOperator = ["+", "-", "*", "÷", "=", "()", "%", "<"].contains(buttonText);
                   return TextButton(
                     onPressed: (){},
                     style: TextButton.styleFrom(
-                      backgroundColor: isOperator ? Colors.blue[900] : Colors.grey[800],
+                      backgroundColor: isOperator ? Colors.blue[900] : 
+                        buttonText == "C" ? Colors.red[700] : Colors.grey[800],
                     ),
                     child: Text(
                       buttonText,
