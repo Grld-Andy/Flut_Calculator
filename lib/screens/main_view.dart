@@ -62,7 +62,7 @@ class MainView extends StatelessWidget {
                 itemCount: buttons.length,
                 itemBuilder: (context, index){
                   final buttonText = buttons[index];
-                  bool isOperator = ["+", "-", "*", "÷", "=", "()", "%", "<"].contains(buttonText);
+                  bool isOperator = ["+", "-", "*", "÷", "=", "()", "%", "<", "."].contains(buttonText);
                   return TextButton(
                     onPressed: (){},
                     style: TextButton.styleFrom(
