@@ -21,13 +21,38 @@ class MainView extends StatelessWidget {
           children: [
             // display screen
             Expanded(
-              child: Column(
-                children: [],
+              flex: 2,
+              child: Container(
+                alignment: Alignment.bottomRight,
+                decoration: BoxDecoration(
+                  border: Border.all(width: 1),
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      "he",
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 20
+                      ),
+                    ),
+                    Text(
+                      "hdafe",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30
+                      ),
+                    ),
+                  ],
+                ),
               )
             ),
-        
+            SizedBox(height: 10,),
             // buttons grid
             Expanded(
+              flex: 5,
               child: GridView.builder(
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 4,
