@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
 
-class MainView extends StatelessWidget {
+class MainView extends StatefulWidget {
   const MainView({super.key});
 
   @override
+  State<MainView> createState() => _MainViewState();
+}
+
+class _MainViewState extends State<MainView> {
+  String calculation = "";
+  int result = 0;
+
+  final List<String> buttons = [
+    "<", "%", "()", "÷",
+    "7", "8", "9", "*",
+    "6", "5", "4", "-",
+    "3", "2", "1", "+",
+    "C", "0", ".", "="
+  ];
+
+  void takeInput(String val){
+    setState(() {
+      calculation += val;
+    });
+  }
+  
+
+  @override
   Widget build(BuildContext context) {
-    final List<String> buttons = [
-      "<", "%", "()", "÷",
-      "7", "8", "9", "*",
-      "6", "5", "4", "-",
-      "3", "2", "1", "+",
-      "C", "0", ".", "="
-    ];
 
     return Scaffold(
       backgroundColor: Colors.grey[900],
@@ -32,14 +48,14 @@ class MainView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      "he",
+                      calculation,
                       style: TextStyle(
                         color: Colors.white70,
                         fontSize: 20
                       ),
                     ),
                     Text(
-                      "hdafe",
+                      "$result",
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 30
@@ -64,7 +80,9 @@ class MainView extends StatelessWidget {
                   final buttonText = buttons[index];
                   bool isOperator = ["+", "-", "*", "÷", "=", "()", "%", "<", "."].contains(buttonText);
                   return TextButton(
-                    onPressed: (){},
+                    onPressed: (){
+                      takeInput(buttonText);
+                    },
                     style: TextButton.styleFrom(
                       backgroundColor: isOperator ? Colors.blue[900] : 
                         buttonText == "C" ? Colors.red[700] : Colors.grey[800],
