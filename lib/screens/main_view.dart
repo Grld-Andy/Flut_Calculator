@@ -20,9 +20,13 @@ class _MainViewState extends State<MainView> {
   ];
 
   void takeInput(String val){
-    setState(() {
-      calculation += val;
-    });
+    if(val == "="){
+      result = int.parse(calculation);
+    }else{
+      setState(() {
+        calculation += val;
+      });
+    }
   }
   
 
