@@ -25,10 +25,15 @@ class _MainViewState extends State<MainView> {
     if(val == "C"){
       setState((){
         calculation = "";
+        result = 0;
       });
     }else if(val == "="){
       setState(() {
-        result = calculation.interpret();
+        if(calculation.isEmpty) {
+          result = 0;
+        }else{
+          result = calculation.interpret();
+        }
       });
     }else{
       setState(() {
