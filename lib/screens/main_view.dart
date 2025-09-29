@@ -106,22 +106,44 @@ class _MainViewState extends State<MainView> {
                 itemBuilder: (context, index){
                   final buttonText = buttons[index];
                   bool isOperator = ["+", "-", "*", "÷", "=", "()", "%", "<", "."].contains(buttonText);
-                  return TextButton(
-                    onPressed: (){
-                      takeInput(buttonText);
-                    },
-                    style: TextButton.styleFrom(
-                      backgroundColor: isOperator ? Colors.blue[900] : 
-                        buttonText == "C" ? Colors.red[700] : Colors.grey[800],
-                    ),
-                    child: Text(
-                      buttonText,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20
+                  if(buttonText == "<"){
+                    return IconButton(
+                      onPressed: (){
+                        takeInput(buttonText);
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: Colors.blue[900] 
                       ),
-                    ),
-                  );
+                      icon: Icon(
+                        Icons.backspace,
+                        color: Colors.white,
+                      ),
+                      // child: Text(
+                      //   buttonText,
+                      //   style: TextStyle(
+                      //     color: Colors.white,
+                      //     fontSize: 20
+                      //   ),
+                      // ),
+                    );
+                  }else{
+                    return TextButton(
+                      onPressed: (){
+                        takeInput(buttonText);
+                      },
+                      style: TextButton.styleFrom(
+                        backgroundColor: isOperator ? Colors.blue[900] : 
+                          buttonText == "C" ? Colors.red[700] : Colors.grey[800],
+                      ),
+                      child: Text(
+                        buttonText,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20
+                        ),
+                      ),
+                    );
+                  }
                 },
               )
             ),
