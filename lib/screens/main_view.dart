@@ -22,7 +22,11 @@ class _MainViewState extends State<MainView> {
   ];
 
   void takeInput(String val){
-    if(val == "="){
+    if(val == "C"){
+      setState((){
+        calculation = "";
+      });
+    }else if(val == "="){
       setState(() {
         result = calculation.interpret();
       });
