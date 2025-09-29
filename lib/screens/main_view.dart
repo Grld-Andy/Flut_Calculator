@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:function_tree/function_tree.dart';
 
 class MainView extends StatefulWidget {
   const MainView({super.key});
@@ -8,8 +9,9 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
+
   String calculation = "";
-  int result = 0;
+  num result = 0;
 
   final List<String> buttons = [
     "<", "%", "()", "÷",
@@ -21,7 +23,7 @@ class _MainViewState extends State<MainView> {
 
   void takeInput(String val){
     if(val == "="){
-      result = int.parse(calculation);
+      result = calculation.interpret();
     }else{
       setState(() {
         calculation += val;
