@@ -22,32 +22,26 @@ class _MainViewState extends State<MainView> {
   ];
 
   void takeInput(String val){
-    if(val == "C"){
-      setState((){
+    setState(() {
+      if(val == "C"){
         calculation = "";
         result = 0;
-      });
-    }else if(val == "<"){
-      setState(() {
-        calculation = calculation.substring(0, calculation.length - 1);
-      });
-    }else if(val == "="){
-      setState(() {
-        if(calculation.isEmpty) {
-          result = 0;
-        }else{
-          try{
-            result = calculation.interpret();
-          }catch(e){
-            print('some kind of error $e');
+      }else if(val == "<"){
+          calculation = calculation.substring(0, calculation.length - 1);
+      }else if(val == "="){
+          if(calculation.isEmpty) {
+            result = 0;
+          }else{
+            try{
+              result = calculation.interpret();
+            }catch(e){
+              debugPrint('some kind of error $e');
+            }
           }
-        }
-      });
-    }else{
-      setState(() {
-        calculation += val;
-      });
-    }
+      }else{
+          calculation += val;
+      }
+    });
   }
   
 
