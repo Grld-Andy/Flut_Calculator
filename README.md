@@ -2,12 +2,12 @@
 
 Formatted my phone and found out it did not come preinstalled with a calculator.
 
-Most available ones had ads or needed some form of payment so I'm making mine.
+Most available ones had **ads** or needed some form of **payment** so I'm making mine.
 
-This application aims to provide a simple, ad-free alternative to online or paid calculator tools.
+This application aims to provide a **simple, ad-free alternative** to online or paid **calculator** tools.
 
 # Project Structure
-All screen views are placed in /lib/screen with the startup function in /lib/main.dart
+All screen views are placed in __/lib/screen__ with the startup function in __/lib/main.dart__
 
 # Prerequisites
 - Flutter sdk
@@ -15,7 +15,7 @@ All screen views are placed in /lib/screen with the startup function in /lib/mai
 - Jdk
 - Device or Emulator
 
-Run flutter doctor to find out other I may have left out🙏
+Run ``` flutter doctor ``` to find out others I may have left out🙏
 
 # Run
 ```
