@@ -36,7 +36,11 @@ class _MainViewState extends State<MainView> {
         if(calculation.isEmpty) {
           result = 0;
         }else{
-          result = calculation.interpret();
+          try{
+            result = calculation.interpret();
+          }catch(e){
+            print('some kind of error $e');
+          }
         }
       });
     }else{
@@ -61,8 +65,10 @@ class _MainViewState extends State<MainView> {
               flex: 2,
               child: Container(
                 alignment: Alignment.bottomRight,
+                padding: EdgeInsets.all(5.0),
                 decoration: BoxDecoration(
-                  border: Border.all(width: 1),
+                  borderRadius: BorderRadius.circular(5),
+                  color: Colors.grey[800],
                 ),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
