@@ -139,7 +139,7 @@ class _MainViewState extends State<MainView> {
                         buttonText,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 20
+                          fontSize: 25
                         ),
                       ),
                     );
