@@ -12,6 +12,7 @@ class _MainViewState extends State<MainView> {
 
   String calculation = "";
   num result = 0;
+  String lastInput = "";
 
   final List<String> buttons = [
     "<", "%", "()", "÷",
@@ -21,14 +22,19 @@ class _MainViewState extends State<MainView> {
     "C", "0", ".", "="
   ];
 
-  void takeInput(String val){
+  void takeInput(String val, bool isOperator){
     setState(() {
-      if(val == "." && calculation.isEmpty){
+      if(val == "." && (calculation.isEmpty || lastInput == "")){
         return;
       }else if(val == "C"){
         calculation = "";
         result = 0;
       }else if(val == "<"){
+          if(calculation.length > 1){
+            lastInput = calculation[calculation.length - 2];
+          }else{
+            lastInput = "";
+          }
           calculation = calculation.substring(0, calculation.length - 1);
       }else if(val == "="){
           if(calculation.isEmpty) {
@@ -41,7 +47,9 @@ class _MainViewState extends State<MainView> {
             }
           }
       }else{
-          calculation += val;
+        lastInput = isOperator ? "" : val;
+        val = val == "÷" ? "/" : val;
+        calculation += val;
       }
     });
   }
@@ -105,27 +113,20 @@ class _MainViewState extends State<MainView> {
                   if(buttonText == "<"){
                     return IconButton(
                       onPressed: (){
-                        takeInput(buttonText);
+                        takeInput(buttonText, isOperator);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.blue[900] 
                       ),
-                      icon: Icon(
+                      icon: const Icon(
                         Icons.backspace,
                         color: Colors.white,
                       ),
-                      // child: Text(
-                      //   buttonText,
-                      //   style: TextStyle(
-                      //     color: Colors.white,
-                      //     fontSize: 20
-                      //   ),
-                      // ),
                     );
                   }else{
                     return TextButton(
                       onPressed: (){
-                        takeInput(buttonText);
+                        takeInput(buttonText, isOperator);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: isOperator ? Colors.blue[900] : 
@@ -133,7 +134,7 @@ class _MainViewState extends State<MainView> {
                       ),
                       child: Text(
                         buttonText,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 25
                         ),
