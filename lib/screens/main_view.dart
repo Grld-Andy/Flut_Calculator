@@ -23,7 +23,9 @@ class _MainViewState extends State<MainView> {
 
   void takeInput(String val){
     setState(() {
-      if(val == "C"){
+      if(val == "." && calculation.isEmpty){
+        return;
+      }else if(val == "C"){
         calculation = "";
         result = 0;
       }else if(val == "<"){
