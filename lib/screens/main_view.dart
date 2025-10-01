@@ -11,8 +11,7 @@ class MainView extends StatefulWidget {
 class _MainViewState extends State<MainView> {
 
   String calculation = "";
-  num result = 0;
-  String lastInput = "";
+  String result = "0";
 
   final List<String> buttons = [
     "<", "%", "()", "÷",
@@ -22,38 +21,40 @@ class _MainViewState extends State<MainView> {
     "C", "0", ".", "="
   ];
 
-  void takeInput(String val, bool isOperator){
+  void takeInput(String val) {
     setState(() {
-      if(val == "." && (calculation.isEmpty || lastInput == "")){
-        return;
-      }else if(val == "C"){
-        calculation = "";
-        result = 0;
-      }else if(val == "<"){
-          if(calculation.length > 1){
-            lastInput = calculation[calculation.length - 2];
-          }else{
-            lastInput = "";
+      switch (val) {
+        case "C":
+          calculation = "";
+          result = "0";
+          break;
+        case "<":
+          if (calculation.isNotEmpty) {
+            calculation = calculation.substring(0, calculation.length - 1);
           }
-          calculation = calculation.substring(0, calculation.length - 1);
-      }else if(val == "="){
-          if(calculation.isEmpty) {
-            result = 0;
-          }else{
-            try{
-              result = calculation.interpret();
-            }catch(e){
-              debugPrint('some kind of error $e');
-            }
+          break;
+        case "=":
+          if (calculation.isEmpty) return;
+          try {
+            // Replace special operators for FunctionTree
+            String expression = calculation.replaceAll('÷', '/');
+            final eval = expression.interpret();
+            result = eval.toString();
+          } catch (e) {
+            result = "Error";
           }
-      }else{
-        lastInput = isOperator ? "" : val;
-        val = val == "÷" ? "/" : val;
-        calculation += val;
+          break;
+        case "()":
+          // Auto-detect whether to insert '(' or ')'
+          int openParens = '('.allMatches(calculation).length;
+          int closeParens = ')'.allMatches(calculation).length;
+          calculation += openParens == closeParens ? '(' : ')';
+          break;
+        default:
+          calculation += val;
       }
     });
-  }
-  
+  }  
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +87,7 @@ class _MainViewState extends State<MainView> {
                       ),
                     ),
                     Text(
-                      "$result",
+                      result,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 30
@@ -109,11 +110,11 @@ class _MainViewState extends State<MainView> {
                 itemCount: buttons.length,
                 itemBuilder: (context, index){
                   final buttonText = buttons[index];
-                  bool isOperator = ["+", "-", "*", "÷", "=", "()", "%", "<", "."].contains(buttonText);
+                  bool isOperator = ["+", "-", "*", "÷", "%", "=", "()", ".", "C", "<"].contains(buttonText);
                   if(buttonText == "<"){
                     return IconButton(
                       onPressed: (){
-                        takeInput(buttonText, isOperator);
+                        takeInput(buttonText);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: Colors.blue[900] 
@@ -126,7 +127,7 @@ class _MainViewState extends State<MainView> {
                   }else{
                     return TextButton(
                       onPressed: (){
-                        takeInput(buttonText, isOperator);
+                        takeInput(buttonText);
                       },
                       style: TextButton.styleFrom(
                         backgroundColor: isOperator ? Colors.blue[900] : 
