@@ -130,8 +130,9 @@ class _MainViewState extends State<MainView> {
                         takeInput(buttonText);
                       },
                       style: TextButton.styleFrom(
-                        backgroundColor: isOperator ? Colors.blue[900] : 
-                          buttonText == "C" ? Colors.red[700] : Colors.grey[800],
+                        backgroundColor: buttonText == "C" ? Colors.red[700] :
+                          isOperator ? Colors.blue[900] : 
+                          Colors.grey[800],
                       ),
                       child: Text(
                         buttonText,
