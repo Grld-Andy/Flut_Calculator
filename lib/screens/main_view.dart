@@ -27,6 +27,10 @@ class _MainViewState extends State<MainView> {
         calculation = "";
         result = 0;
       });
+    }else if(val == "<"){
+      setState(() {
+        calculation = calculation.substring(0, calculation.length - 1);
+      });
     }else if(val == "="){
       setState(() {
         if(calculation.isEmpty) {
