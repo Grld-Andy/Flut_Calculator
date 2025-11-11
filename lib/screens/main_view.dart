@@ -159,10 +159,8 @@ class _MainViewState extends State<MainView> {
           padding: const EdgeInsets.all(12.0),
           child: Column(
             children: [
-              // Display screen
               Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
                 decoration: BoxDecoration(
                   color: Colors.grey[850],
                   borderRadius: BorderRadius.circular(12),
@@ -170,29 +168,42 @@ class _MainViewState extends State<MainView> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    TextField(
-                      controller: calculationController,
-                      style:
-                          const TextStyle(color: Colors.white, fontSize: 36),
-                      textAlign: TextAlign.right,
-                      cursorColor: Colors.blueAccent,
-                      decoration: const InputDecoration(
-                        border: InputBorder.none,
-                        hintText: '0',
-                        hintStyle: TextStyle(color: Colors.white38),
+                    // Scrollable TextField for calculation
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      reverse: true, // keeps cursor visible at the end
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width - 24, // adjust width
+                        child: TextField(
+                          controller: calculationController,
+                          style: const TextStyle(color: Colors.white, fontSize: 36),
+                          textAlign: TextAlign.right,
+                          cursorColor: Colors.blueAccent,
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: '0',
+                            hintStyle: TextStyle(color: Colors.white38),
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Text(
-                      result,
-                      style: const TextStyle(
-                          color: Colors.white70,
-                          fontSize: 28,
-                          fontWeight: FontWeight.w400),
+                    // Scrollable result if too long
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      reverse: true,
+                      child: Text(
+                        result,
+                        style: const TextStyle(
+                            color: Colors.white70,
+                            fontSize: 28,
+                            fontWeight: FontWeight.w400),
+                      ),
                     ),
                   ],
                 ),
               ),
+
               const SizedBox(height: 20),
               // Buttons grid
               Expanded(
