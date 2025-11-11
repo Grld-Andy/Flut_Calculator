@@ -73,6 +73,56 @@ class _MainViewState extends State<MainView> {
     });
   }
 
+  Widget buildButton(String text) {
+    bool isOperator = [
+      "+", "-", "*", "÷", "%", "=", "()", ".", "C", "<"
+    ].contains(text);
+
+    Color baseColor = isOperator
+        ? Colors.blue[700]!
+        : Colors.grey[800]!;
+    if (text == "C") baseColor = Colors.red[700]!;
+    if (text == "<") baseColor = Colors.orange[700]!;
+
+    return GestureDetector(
+      onTap: () => takeInput(text),
+      child: Listener(
+        onPointerDown: (_) => setState(() {}),
+        onPointerUp: (_) => setState(() {}),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          decoration: BoxDecoration(
+            color: baseColor,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.5),
+                offset: const Offset(4, 4),
+                blurRadius: 6,
+              ),
+              BoxShadow(
+                color: Colors.white.withOpacity(0.1),
+                offset: const Offset(-2, -2),
+                blurRadius: 6,
+              ),
+            ],
+          ),
+          child: Center(
+            child: text == "<"
+                ? const Icon(Icons.backspace, color: Colors.white, size: 28)
+                : Text(
+                    text,
+                    style: const TextStyle(
+                        fontSize: 26,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold),
+                  ),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -84,7 +134,8 @@ class _MainViewState extends State<MainView> {
             children: [
               // Display screen
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
                 decoration: BoxDecoration(
                   color: Colors.grey[850],
                   borderRadius: BorderRadius.circular(12),
@@ -94,7 +145,8 @@ class _MainViewState extends State<MainView> {
                   children: [
                     TextField(
                       controller: calculationController,
-                      style: const TextStyle(color: Colors.white, fontSize: 36),
+                      style:
+                          const TextStyle(color: Colors.white, fontSize: 36),
                       textAlign: TextAlign.right,
                       cursorColor: Colors.blueAccent,
                       decoration: const InputDecoration(
@@ -125,33 +177,7 @@ class _MainViewState extends State<MainView> {
                     mainAxisSpacing: 12,
                   ),
                   itemBuilder: (context, index) {
-                    final buttonText = buttons[index];
-                    bool isOperator = [
-                      "+", "-", "*", "÷", "%", "=", "()", ".", "C", "<"
-                    ].contains(buttonText);
-
-                    Color bgColor = isOperator
-                        ? Colors.blue[700]!
-                        : Colors.grey[800]!;
-                    if (buttonText == "C") bgColor = Colors.red[700]!;
-                    if (buttonText == "<") bgColor = Colors.orange[700]!;
-
-                    return ElevatedButton(
-                      onPressed: () => takeInput(buttonText),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: bgColor,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12)),
-                        padding: const EdgeInsets.all(20),
-                      ),
-                      child: buttonText == "<"
-                          ? const Icon(Icons.backspace, color: Colors.white)
-                          : Text(
-                              buttonText,
-                              style: const TextStyle(
-                                  fontSize: 26, color: Colors.white),
-                            ),
-                    );
+                    return buildButton(buttons[index]);
                   },
                 ),
               ),
