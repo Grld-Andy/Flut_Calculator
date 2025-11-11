@@ -9,7 +9,7 @@ class MainView extends StatefulWidget {
 }
 
 class _MainViewState extends State<MainView> {
-  String calculation = "";
+  TextEditingController calculationController = TextEditingController();
   String result = "0";
 
   final List<String> buttons = [
@@ -21,15 +21,23 @@ class _MainViewState extends State<MainView> {
   ];
 
   void takeInput(String val) {
+    String calculation = calculationController.text;
+    int cursorPos = calculationController.selection.base.offset;
+    cursorPos = cursorPos < 0 ? calculation.length : cursorPos;
+
     setState(() {
       switch (val) {
         case "C":
-          calculation = "";
+          calculationController.text = "";
           result = "0";
           break;
         case "<":
-          if (calculation.isNotEmpty) {
-            calculation = calculation.substring(0, calculation.length - 1);
+          if (calculation.isNotEmpty && cursorPos > 0) {
+            calculationController.text =
+                calculation.substring(0, cursorPos - 1) +
+                    calculation.substring(cursorPos);
+            calculationController.selection =
+                TextSelection.fromPosition(TextPosition(offset: cursorPos - 1));
           }
           break;
         case "=":
@@ -46,10 +54,21 @@ class _MainViewState extends State<MainView> {
         case "()":
           int openParens = '('.allMatches(calculation).length;
           int closeParens = ')'.allMatches(calculation).length;
-          calculation += openParens == closeParens ? '(' : ')';
+          String parenToInsert = openParens == closeParens ? '(' : ')';
+          calculationController.text =
+              calculation.substring(0, cursorPos) +
+                  parenToInsert +
+                  calculation.substring(cursorPos);
+          calculationController.selection = TextSelection.fromPosition(
+              TextPosition(offset: cursorPos + 1));
           break;
         default:
-          calculation += val;
+          calculationController.text =
+              calculation.substring(0, cursorPos) +
+                  val +
+                  calculation.substring(cursorPos);
+          calculationController.selection = TextSelection.fromPosition(
+              TextPosition(offset: cursorPos + val.length));
       }
     });
   }
@@ -59,98 +78,84 @@ class _MainViewState extends State<MainView> {
     return Scaffold(
       backgroundColor: Colors.grey[900],
       body: SafeArea(
-        child: SizedBox.expand(
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                // display screen
-                Expanded(
-                  flex: 2,
-                  child: Container(
-                    alignment: Alignment.bottomRight,
-                    padding: const EdgeInsets.all(5.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      color: Colors.grey[800],
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          calculation,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 40,
-                          ),
-                        ),
-                        Text(
-                          result,
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontSize: 30,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            children: [
+              // Display screen
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
+                decoration: BoxDecoration(
+                  color: Colors.grey[850],
+                  borderRadius: BorderRadius.circular(12),
                 ),
-                const SizedBox(height: 10),
-                // buttons grid
-                Expanded(
-                  flex: 5,
-                  child: GridView.builder(
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 4,
-                      crossAxisSpacing: 10,
-                      mainAxisSpacing: 10,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    TextField(
+                      controller: calculationController,
+                      style: const TextStyle(color: Colors.white, fontSize: 36),
+                      textAlign: TextAlign.right,
+                      cursorColor: Colors.blueAccent,
+                      decoration: const InputDecoration(
+                        border: InputBorder.none,
+                        hintText: '0',
+                        hintStyle: TextStyle(color: Colors.white38),
+                      ),
                     ),
-                    itemCount: buttons.length,
-                    itemBuilder: (context, index) {
-                      final buttonText = buttons[index];
-                      bool isOperator = [
-                        "+", "-", "*", "÷", "%", "=", "()", ".", "C", "<"
-                      ].contains(buttonText);
-                      if (buttonText == "<") {
-                        return IconButton(
-                          onPressed: () {
-                            takeInput(buttonText);
-                          },
-                          style: TextButton.styleFrom(
-                            backgroundColor: Colors.blue[900],
-                          ),
-                          icon: const Icon(
-                            Icons.backspace,
-                            color: Colors.white,
-                          ),
-                        );
-                      } else {
-                        return TextButton(
-                          onPressed: () {
-                            takeInput(buttonText);
-                          },
-                          style: TextButton.styleFrom(
-                            backgroundColor: buttonText == "C"
-                                ? Colors.red[700]
-                                : isOperator
-                                    ? Colors.blue[900]
-                                    : Colors.grey[800],
-                          ),
-                          child: Text(
-                            buttonText,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 25,
+                    const SizedBox(height: 10),
+                    Text(
+                      result,
+                      style: const TextStyle(
+                          color: Colors.white70,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 20),
+              // Buttons grid
+              Expanded(
+                child: GridView.builder(
+                  itemCount: buttons.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                  ),
+                  itemBuilder: (context, index) {
+                    final buttonText = buttons[index];
+                    bool isOperator = [
+                      "+", "-", "*", "÷", "%", "=", "()", ".", "C", "<"
+                    ].contains(buttonText);
+
+                    Color bgColor = isOperator
+                        ? Colors.blue[700]!
+                        : Colors.grey[800]!;
+                    if (buttonText == "C") bgColor = Colors.red[700]!;
+                    if (buttonText == "<") bgColor = Colors.orange[700]!;
+
+                    return ElevatedButton(
+                      onPressed: () => takeInput(buttonText),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: bgColor,
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12)),
+                        padding: const EdgeInsets.all(20),
+                      ),
+                      child: buttonText == "<"
+                          ? const Icon(Icons.backspace, color: Colors.white)
+                          : Text(
+                              buttonText,
+                              style: const TextStyle(
+                                  fontSize: 26, color: Colors.white),
                             ),
-                          ),
-                        );
-                      }
-                    },
-                  ),
+                    );
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
