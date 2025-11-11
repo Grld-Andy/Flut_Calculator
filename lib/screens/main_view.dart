@@ -20,6 +20,9 @@ class _MainViewState extends State<MainView> {
     "C", "0", ".", "="
   ];
 
+  // Track pressed button for animation
+  String pressedButton = "";
+
   void takeInput(String val) {
     String calculation = calculationController.text;
     int cursorPos = calculationController.selection.base.offset;
@@ -84,40 +87,64 @@ class _MainViewState extends State<MainView> {
     if (text == "C") baseColor = Colors.red[700]!;
     if (text == "<") baseColor = Colors.orange[700]!;
 
+    bool isPressed = pressedButton == text;
+
     return GestureDetector(
-      onTap: () => takeInput(text),
-      child: Listener(
-        onPointerDown: (_) => setState(() {}),
-        onPointerUp: (_) => setState(() {}),
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 100),
-          decoration: BoxDecoration(
-            color: baseColor,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.5),
-                offset: const Offset(4, 4),
-                blurRadius: 6,
-              ),
-              BoxShadow(
-                color: Colors.white.withOpacity(0.1),
-                offset: const Offset(-2, -2),
-                blurRadius: 6,
-              ),
-            ],
-          ),
-          child: Center(
-            child: text == "<"
-                ? const Icon(Icons.backspace, color: Colors.white, size: 28)
-                : Text(
-                    text,
-                    style: const TextStyle(
-                        fontSize: 26,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold),
+      onTapDown: (_) {
+        setState(() {
+          pressedButton = text;
+        });
+      },
+      onTapUp: (_) {
+        setState(() {
+          pressedButton = "";
+        });
+        takeInput(text);
+      },
+      onTapCancel: () {
+        setState(() {
+          pressedButton = "";
+        });
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        transform: isPressed
+            ? (Matrix4.translationValues(0, 4, 0))
+            : Matrix4.identity(),
+        decoration: BoxDecoration(
+          color: baseColor,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: isPressed
+              ? [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.2),
+                    offset: const Offset(2, 2),
+                    blurRadius: 2,
                   ),
-          ),
+                ]
+              : [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.5),
+                    offset: const Offset(4, 4),
+                    blurRadius: 6,
+                  ),
+                  BoxShadow(
+                    color: Colors.white.withOpacity(0.1),
+                    offset: const Offset(-2, -2),
+                    blurRadius: 6,
+                  ),
+                ],
+        ),
+        child: Center(
+          child: text == "<"
+              ? const Icon(Icons.backspace, color: Colors.white, size: 28)
+              : Text(
+                  text,
+                  style: const TextStyle(
+                      fontSize: 26,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold),
+                ),
         ),
       ),
     );
